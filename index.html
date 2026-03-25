@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>إلى السند حيدر</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Amiri:wght@700&display=swap');
+        
+        body { margin: 0; background: #000; color: #fff; font-family: 'Cairo', sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; overflow: hidden; }
+        
+        #particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+
+        .screen { display: none; width: 90%; max-width: 420px; text-align: center; z-index: 10; position: relative; }
+        .active { display: block !important; animation: fadeIn 0.6s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+
+        .neon-box { 
+            background: rgba(10, 10, 10, 0.9); 
+            border: 2px solid #d4af37; 
+            border-radius: 20px; 
+            padding: 25px; 
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4), inset 0 0 10px rgba(212, 175, 55, 0.2); 
+            animation: neonPulse 2s infinite alternate; 
+            margin-bottom: 15px;
+        }
+        @keyframes neonPulse { from { box-shadow: 0 0 10px rgba(212, 175, 55, 0.3); } to { box-shadow: 0 0 25px rgba(212, 175, 55, 0.6); } }
+
+        h2, h3 { color: #d4af37; text-shadow: 0 0 10px rgba(212,175,55,0.7); }
+        
+        .btn { background: rgba(212, 175, 55, 0.2); border: 2px solid #d4af37; color: #d4af37; padding: 16px; border-radius: 15px; width: 100%; font-weight: bold; font-size: 1.15rem; margin-top: 15px; cursor: pointer; transition: 0.3s; box-shadow: 0 0 10px rgba(212,175,55,0.3); }
+        .btn:active { background: #d4af37; color: #000; box-shadow: 0 0 20px #d4af37; }
+        
+        /* تحسين شكل العداد ليكون أوضح */
+        #daysDisplay { font-size: 1.3rem; color: #fff; font-weight: bold; margin-top: 10px; display: block; line-height: 1.6; }
+        .heart-beat { color: #e74c3c; font-size: 1.6rem; animation: heart-pulse 1s infinite; display: inline-block; margin-left: 5px; }
+        @keyframes heart-pulse { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
+
+        textarea { width: 100%; height: 110px; background: #111; border: 1px solid #d4af37; color: #fff; border-radius: 12px; padding: 12px; font-family: 'Cairo'; box-sizing: border-box; }
+        
+        .poem-box { font-family: 'Amiri', serif; font-size: 1.5rem; border-bottom: 2px solid #d4af37; padding: 12px 0; color: #d4af37; text-shadow: 0 0 10px gold; }
+        #timer { font-size: 5.5rem; font-weight: bold; color: #fff; text-shadow: 0 0 15px rgba(212,175,55,0.8); margin: 15px 0; }
+
+        #final-card { position: relative; padding: 30px; }
+        .download-icon { position: absolute; top: 15px; left: 15px; font-size: 24px; color: gold; cursor: pointer; filter: drop-shadow(0 0 5px gold); opacity: 0.7; }
+        
+        .user-img { width: 125px; height: 125px; border-radius: 50%; border: 4px solid #d4af37; margin-bottom: 25px; object-fit: cover; box-shadow: 0 0 20px rgba(212,175,55,0.6); }
+        .msg-text { text-align: justify; line-height: 2; font-size: 1.1rem; color: #f5f5f5; min-height: 120px; }
+
+        .bond-container { display: flex; align-items: center; justify-content: space-around; margin-top: 30px; position: relative; }
+        .fingerprint { width: 85px; height: 85px; border: 2px solid #d4af37; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-direction: column; font-size: 0.85rem; cursor: pointer; transition: 0.5s; background: rgba(212,175,55,0.1); }
+        .bond-line { height: 4px; width: 0%; background: linear-gradient(90deg, #d4af37, #fff, #d4af37); box-shadow: 0 0 15px #d4af37; transition: 1.5s ease-in-out; }
+        .activated-finger { box-shadow: 0 0 30px gold; background: #d4af37 !important; color: #000 !important; transform: scale(1.1); }
+    </style>
+</head>
+<body>
+
+<div id="particles-js"></div>
+<audio id="player" loop></audio>
+
+<div id="step1" class="screen active">
+    <div class="neon-box">
+        <h2>اختر نغمة الرحلة 🎵</h2>
+        <div style="border-bottom: 1px solid #333; padding-bottom: 18px; margin-bottom: 18px;">
+            نحن أصدقاء منذ: <br>
+            <span id="daysDisplay">يتم الحساب...</span>
+            <span class="heart-beat">💓</span>
+        </div>
+        <button class="btn" onclick="startApp('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')">موسيقى هادئة وملكية</button>
+        <button class="btn" style="border-color:#b8860b; color:#b8860b;" onclick="startApp('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3')">موسيقى حماسية وأخوية</button>
+    </div>
+</div>
+
+<div id="step2" class="screen">
+    <div class="neon-box">
+        <h3>سؤال من القلب 🔒</h3>
+        <p>ماذا يعني لك حيدر؟</p>
+        <textarea id="ans" placeholder="اكتب مشاعرك هنا..."></textarea>
+        <button class="btn" onclick="sendToTelegram()">إرسال ومتابعة</button>
+    </div>
+</div>
+
+<div id="step3" class="screen">
+    <div class="poem-box">أخٌ كالسيفِ في كفي صقيلٌ</div>
+    <div class="poem-box">وليس لهُ في الخلائقِ من مثيلُ</div>
+    <div id="timer">30</div>
+    <div class="heart-beat heart-fast" style="font-size:3rem;">💓</div>
+</div>
+
+<div id="step4" class="screen">
+    <div style="font-size:110px; cursor:pointer; filter: drop-shadow(0 0 15px gold);" onclick="openGift()">☝️</div>
+    <p style="color:#d4af37; font-weight:bold; margin-top:25px;">ضع بصمتك لفتح الهدية</p>
+</div>
+
+<div id="step5" class="screen">
+    <div class="neon-box" id="final-card">
+        <span class="download-icon" onclick="downloadCard()">📸</span>
+        <img src="https://i.ibb.co/nsnBRnqs/1000110251.jpg" class="user-img">
+        <div id="typewriter" class="msg-text"></div>
+        <h3 style="margin-top:30px; border-top:1px solid #444; padding-top:20px;">من أخوك: حيدر</h3>
+    </div>
+</div>
+
+<div id="step6" class="screen">
+    <div class="neon-box" id="bond-box">
+        <h3>رابط الأخوة الأبدي 🔒</h3>
+        <div class="bond-container">
+            <div class="fingerprint activated-finger" id="finger1">🖐️<br>حيدر</div>
+            <div class="bond-line" id="connection-line"></div>
+            <div class="fingerprint" id="finger2" onclick="activateBond()">🖐️<br>أنت</div>
+        </div>
+        <p id="bond-status" style="color: gold; margin-top: 25px; font-weight: bold;">اضغط على بصمتك لتأكيد العهد...</p>
+    </div>
+</div>
+
+<script>
+    particlesJS("particles-js", {
+        "particles": { "number": { "value": 60 }, "color": { "value": "#d4af37" }, "shape": { "type": "circle" }, "opacity": { "value": 0.6 }, "size": { "value": 2.5 }, "line_linked": { "enable": true, "distance": 130, "color": "#d4af37", "opacity": 0.3, "width": 1 }, "move": { "enable": true, "speed": 1.5, "direction": "none", "random": true, "straight": false, "out_mode": "out", "bounce": false } },
+        "interactivity": { "detect_on": "canvas", "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" } } }
+    });
+
+    // --- العداد المحدث (يعد بالثواني) ---
+    const startDate = new Date("2026-01-19T19:36:00");
+    setInterval(() => {
+        const now = new Date();
+        const diff = now - startDate;
+        
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const m = Math.floor((diff / (1000 * 60)) % 60);
+        const s = Math.floor((diff / 1000) % 60);
+        
+        document.getElementById('daysDisplay').innerText = 
+            `${d} يوم، ${h} ساعة، ${m} دقيقة، ${s} ثانية`;
+    }, 1000);
+
+    function showStep(s) {
+        document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+        document.getElementById('step' + s).classList.add('active');
+    }
+
+    function startApp(url) {
+        let p = document.getElementById('player');
+        p.src = url; p.play().catch(() => {});
+        showStep(2);
+    }
+
+    function sendToTelegram() {
+        const text = document.getElementById('ans').value;
+        if(!text) return alert("اكتب شيئاً أولاً");
+        fetch(`https://api.telegram.org/bot8686945908:AAEfOj2C-MK6oUrjR0Wan-yHBzHU-wPduO8/sendMessage?chat_id=5022700372&text=${encodeURIComponent("إجابة الأخ: " + text)}`);
+        showStep(3);
+        let time = 30;
+        let itv = setInterval(() => {
+            if(time <= 0) { clearInterval(itv); showStep(4); }
+            else { document.getElementById('timer').innerText = time; time--; }
+        }, 1000);
+    }
+
+    function openGift() {
+        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+        showStep(5);
+        startTyping();
+    }
+
+    const fullMsg = "أريدك أن تعرف يا أخي أنني معك دائماً؛ فإذا احتجت إلى أي شيء، أو ضاقت بك السبل يوماً، فلا تتردد أبداً في طلبي، فأنا لك العضيد الذي لا يغيب، والسند الذي تجده قبل أن تنادي. رغم أن بيننا شاشات وكيلومترات، إلا أن ملامح صدقك واضحة، ومعزتك عندي تتجاوز كل الحدود. دمت لي رفيقاً لا يمل، وصديقاً يملأ عالمي بالصدق والمودة.";
+    
+    function startTyping() {
+        let i = 0; let target = document.getElementById("typewriter");
+        function type() { 
+            if (i < fullMsg.length) { 
+                target.innerHTML += fullMsg.charAt(i); i++; setTimeout(type, 50); 
+            } else {
+                setTimeout(() => showStep(6), 7000);
+            }
+        }
+        type();
+    }
+
+    let bondActivated = false;
+    function activateBond() {
+        if(bondActivated) return;
+        bondActivated = true;
+        
+        document.getElementById('finger2').classList.add('activated-finger');
+        document.getElementById('connection-line').style.width = '40%';
+        document.getElementById('bond-status').innerText = "تم توثيق عهد الأخوة بنجاح! 🔒🤝";
+        confetti({ particleCount: 300, spread: 100, origin: { y: 0.5 }, colors: ['#d4af37', '#ffffff'] });
+        
+        fetch(`https://api.telegram.org/bot8686945908:AAEfOj2C-MK6oUrjR0Wan-yHBzHU-wPduO8/sendMessage?chat_id=5022700372&text=${encodeURIComponent("بشرى يا حيدر: صديقك لمس الرابط الأبدي وأكد العهد! 🤝✨")}`);
+
+        setTimeout(() => {
+            const finalBtn = document.createElement('button');
+            finalBtn.className = 'btn';
+            finalBtn.style.animation = 'fadeIn 1s ease';
+            finalBtn.innerText = "اضغط يا صديقي";
+            finalBtn.onclick = function() {
+                alert("كم متعب حتى انهيت هذا لك.. اخبرني هل افرحك الرابط؟");
+            };
+            document.getElementById('bond-box').appendChild(finalBtn);
+        }, 2000);
+    }
+
+    function downloadCard() {
+        html2canvas(document.querySelector("#final-card")).then(canvas => {
+            let link = document.createElement("a");
+            link.download = "ذكرى_حيدر.png";
+            link.href = canvas.toDataURL();
+            link.click();
+        });
+    }
+</script>
+</body>
+</html>
