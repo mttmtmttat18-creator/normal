@@ -1,0 +1,37 @@
+name: Build APK
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Buildozer and Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pip zip unzip openjdk-17-jdk libffi-dev libssl-dev autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libsqlite3-dev
+          pip3 install --user buildozer
+
+      - name: Extract and Build APK
+        run: |
+          # تأكد من تسمية ملفك app.py إلى main.py قبل الضغط
+          unzip -o project.zip -d ./myapp
+          cd myapp
+          if [ ! -f buildozer.spec ]; then
+            /home/runner/.local/bin/buildozer init
+          fi
+          # أمر البناء (سيستغرق وقتاً)
+          yes | /home/runner/.local/bin/buildozer -v android debug
+          
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: AlMizan-App-Final
+          path: myapp/bin/*.apk
